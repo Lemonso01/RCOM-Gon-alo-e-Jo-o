@@ -1,0 +1,45 @@
+TP2 Exp1
+
+1.
+
+
+2.
+	Os endereços MAC e IP dos pacotes ARP são os endereços do recetor e do emissor. Neste caso, os endereços MAC e IP do emissor correspondem a, 00:21:5a:61:2f:4e e 172.16.60.1, respetivamente. E os endereços MAC e IP do recetor correspondem a, 00:21:5a:c5:61:bb e 172.16.60.254 respetivamente. É de notar que no pacote enviado inicialmente (Who has 172.16.60.254?) o endereço MAC que se pretende obter ainda não se encontra resolvido. Só na resposta é que conseguimos observar ambos os endereços MAC.
+
+3.
+	O comando ping cria pares de pacotes de pedidos e respotas utilizando o protocolo ICMP, enviando um pedido (echo ping request) ao qual é respondido, caso exista ligação, num novo pacote (echo ping reply).
+
+4.
+	Os endereços MAC e IP dos pacotes ping, pacotes do tipo ICMP, para o emissor neste caso os endreços MAC e IP correspondem a, 00:21:5a:61:2f:4e e 172.16.60.1, respetivamente. E os endereços MAC e IP do recetor correspondem a, 00:21:5a:c5:61:bb e 172.16.60.254 respetivamente.
+
+5.
+	Para determinarmos se um frame Ethernet que recebemos é do tipo ARP, IP ou ICMP é nececessário examinar o conteúdo do pacote, nomeadamente o cabeçalho e na camada de transporte, pois aqui vem indicado o endereço do tipo de pacote, sendo que pacotes de tipo ARP tem um endereço de 0x0806, os do tipo IP 0x0800 e os do tipo ICMP também 0x0800.
+
+6.
+	Para determinar o comprimento de um frame é necessário observar a camada mais alta onde podemos obter o comprimento do frame em bytes, neste caso o comprimento dos frames dos pacotes do tipo ARP é 42 bytes na pergunta do emissor, 60 bytes na resposta do recetor e 98 bytes nos pacotes de ping do tipo ICMP.
+
+7.
+	O loopback interface é um interface virtual de rede dentro do sistema operativo de um computador que permite comunicação entre processos a correr em simultâneo no mesmo computador. O loopback interface tem por norma o IP 127.0.0.1, IP que aponta de volta ao computador (loopback). O loopback interface é importante por diversas razões tais como: 
+-testar aplicações e serviços da rede sem ter de usar uma rede física; 
+-resolução de problemas, pois permite verificar se o problema é interno ou da rede externa; 
+-serviços locais tais como DNS e servidores WEB para prestar serviços a processos a correr no mesmo computador. Ao usar o loopback interface neste tipo de serviços, estes pode ser executado sem ser necessário usar a rede externa;  
+-razões de segurança, pois ao utilizar o loopback interface os serviços estão protegidos de ataques à rede externa, dado que não estão expostos a essa rede.
+
+Exp2
+
+1.
+	Para configurar a bridge 60 começamos por dar reset ao switch usando o software GTKterm, ligamo-nos ao switch e executamos o reset "/system reset-configuration", após o switch ter sido reeiniciado podemos começar a criar as bridges. Com os comandos "/interface bridge add name=bridge60" criamos a bridge necessária, depois é necessário retirar as ports da bridge default com o comando "/interface bridge port remove [find interface =etherX]",em que X é o numero da porta em que o computador está ligado no switch, e depois adicionar as ports dos computadores à respetiva bridge, para isto, no terminal do computador que desejamos adicionar a uma certa bridge executamos o comando "/interface bridge port add bridge=bridge60 interface=etherX", em que X é o numero da porta em que o computador está ligado no switch, para a bridge 60 executamos este comando nos computadores tux63 e tux64, e assim concluimos o setup da bridge.
+
+2.
+	Há apenas 2 broadcast domains, dado que o TUX64 apenas consegue comunicar com o TUX63, e o TUX62 não tem forma de comunicar com os outros 2. Tal acontece, porque se encontram em bridges diferentes.
+
+Exp 3
+1.
+
+2.
+	As tabelas de encaminhamento são utilizadas com o objetivo de determinar o "salto" que um pacote deverá realizar, de modo a chegar ao seu destino final.De uma forma geral, as entradas desta tabela possuem: 
+-os endereços IP e MAC do emissor e do recetor; 
+-o IP do próximo "salto", isto é o IP do próximo router ou switch que o pacote deverá ser encaminhado;
+-o número da porta para o qual o pacote deverá ser encaminhado, de modo a estar pronto para ser enviado;
+-o tipo de Ether;
+-o tipo de protocolo;
