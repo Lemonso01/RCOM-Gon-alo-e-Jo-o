@@ -35,6 +35,7 @@ Exp2
 
 Exp 3
 1.
+	No tux 63 tem uma rota para a rede 172.16.61.0 sendo a gateway o tux 64 com o endereço IP 172.16.60.254. No tux 62 tem uma rota para a rede 172.16.60.0 sendo a gateway o tux 64 com o endereço 172.16.61.253. E o tux 64, que funciona como router tem duas rotas, uma para a sub-rede 172.16.60.0 e outra para a sub-rede 172.16.61.0. De modo a comunicarem entre redes diferentes, para as quais não existe rota direta, saibam para que máquina precisam de comunicar de modo a que esta mensagem seja reencaminhada.
 
 2.
 	As tabelas de encaminhamento são utilizadas com o objetivo de determinar o "salto" que um pacote deverá realizar, de modo a chegar ao seu destino final.De uma forma geral, as entradas desta tabela possuem: 
@@ -43,3 +44,36 @@ Exp 3
 -o número da porta para o qual o pacote deverá ser encaminhado, de modo a estar pronto para ser enviado;
 -o tipo de Ether;
 -o tipo de protocolo;
+
+3.
+	As mensagens ARP que são detetadas são as relativas ao comando ping, em que estas procuras descobrir o endreço máquina relativo ao IP para o qual querem realizar o ping, neste caso há duas trocas de pacotes ARP em que ambas as máquinas perguntam o endereço MAC uma da outra para enviar o ping e enviar a resposta ao ping, o endereço MAC de quem envia o ping é 00:21:5a:c5:61:bb e de quem recebe o ping e responde é 00:21:5a:61:2f:4e.
+
+4.
+	Os pacotes de ICMP que são observados são relativos ao envio e resposta do pedido de ping, estes pacotes são observados pois houve resolução do endereço máquina das duas máquinas e foi possível estabelecer uma ligação para permitir efeturar o ping com sucesso.
+
+5.
+	Os endereços de IP e MAC dos pactes ICMP são os relativos às maquinas que efetuam o pedido de ping e respondem, ou seja para quem efetua o ping o endereço IP é 172.16.60.1 e MAC 00:21:5a:61:2f:4e e quem efetua a resposta ao ping tem um endereço IP de 172.16.61.253 e um enedereço MAC de 00:21:5a:c5:61:bb.
+
+Exp 4
+
+1.
+	Para configurar uma static route é necessário configurar o router para criar essa route por onde nós queremos ligar a rede. Uma static route é, como o nome indica, estática pelo que apenas pode ser modificada com input do utilizador. Para essa route ser criada, após o router ter sido devidamente configurado, utiliza-se o comando /ip route add dst-address=172.16.60.0/24 gateway=172.16.61.253 em que se indica o endreço de destino que se prentende ser o local onde a route termina e um terminal gateway pela qual a route é obrigada a passar.
+
+2.
+	No caso de existir uma rota direta para o destino, o pacote será enviado diretamente. Quando não existe uma rota direta, os tuxes enviam para o router que foi definido como o default route. Neste router é encarregue de distribuir os pacotes para os gateways ou máquinas necessárias.
+
+3.
+	Por default, o router já se encontra com o NAT ativo. No entanto, é possível adicionar a regra : “/ip firewall nat add chain=srcnat action=masquerade out-interface=ether1” para adicionar a máscara do NAT em um router que a tenha desativado.
+
+4.
+	NAT significa Network Address Translation e é responsável por mapear os endereços privados para um endereço público antes de transferir a informação. Sem o NAT não é possível alcançar a internet a partir do laboratório, já que os endereços que foram usados são privados.
+
+Exp 5
+
+1.
+	
+
+2.
+
+
+
